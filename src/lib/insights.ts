@@ -103,4 +103,44 @@ export function computeConclusions(rows: SurveyRow[]): Conclusions {
     topDesiredFeature: topEntry(desiredFeatures),
     futureInterestPercentage: percentage(interestedCount, responseCount),
   }
+}export interface Conclusions {
+  hasEnoughData: boolean
+  responseCount: number
+  mainStressSource: string | null
+  averageStressLevel: number | null
+  highStressPercentage: number | null
+  dominantStressFrequency: string | null
+  topCopingMethod: string | null
+  ineffectiveCopingPercentage: number | null
+  topDesiredFeature: string | null
+  futureInterestPercentage: number | null
+}
+
+const MIN_RESPONSES_FOR_CONCLUSIONS = 5
+
+export function computeConclusions(rows: SurveyRow[]): Conclusions {
+  const responseCount = rows.length
+  const hasEnoughData = responseCount >= MIN_RESPONSES_FOR_CONCLUSIONS
+
+  const mainSources = countBy(rows, (r) => r.mainStressSource)
+  const frequencies = countBy(rows, (r) => r.stressFrequency)
+  const copingMethods = countMultiBy(rows, (r) => r.copingMethods)
+  const desiredFeatures = countMultiBy(rows, (r) => r.desiredFeatures)
+
+  const highStressCount = rows.filter((r) => r.stressLevel >= 7).length
+  const ineffectiveCount = rows.filter((r) => r.copingEffectiveness === 'Pas vraiment' || r.copingEffectiveness === 'Pas du tout').length
+  const interestedCount = rows.filter((r) => r.futureSolutionInterest === 'Oui').length
+
+  return {
+    hasEnoughData,
+    responseCount,
+    mainStressSource: topEntry(mainSources),
+    averageStressLevel: average(rows.map((r) => r.stressLevel)),
+    highStressPercentage: percentage(highStressCount, responseCount),
+    dominantStressFrequency: topEntry(frequencies),
+    topCopingMethod: topEntry(copingMethods),
+    ineffectiveCopingPercentage: percentage(ineffectiveCount, responseCount),
+    topDesiredFeature: topEntry(desiredFeatures),
+    futureInterestPercentage: percentage(interestedCount, responseCount),
+  }
 }
