@@ -1,6 +1,6 @@
 // Liens et paramètres facilement modifiables pour la page "Suite"
 export const communityConfig = {
-  communityUrl: 'https://chat.whatsapp.com/REMPLACER_PAR_LE_LIEN',
+  communityUrl: 'https://chat.whatsapp.com/JGbwppxED5b8BcfNb9cM75',
   facebookUrl: 'https://facebook.com/smartstudy',
   tiktokUrl: 'https://tiktok.com/@smartstudy',
   instagramUrl: 'https://instagram.com/smartstudy',
